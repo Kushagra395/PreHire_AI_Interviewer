@@ -141,7 +141,7 @@ const [sheetOpen, setSheetOpen] = useState(false); // Controls mobile menu open/
             {isSignedIn ? (
               <UserButton afterSignOutUrl="/" />
             ) : (
-              <SignInButton mode="modal">
+              <Link to="/signin" mode="modal">
                 <button className={cn(
                   "flex items-center gap-1.5 px-3 py-1.5 rounded-md",
                   "text-sm font-medium bg-purple-600 hover:bg-purple-700 transition-colors",
@@ -150,7 +150,7 @@ const [sheetOpen, setSheetOpen] = useState(false); // Controls mobile menu open/
                   <LogIn className="h-4 w-4" />
                   <span>Sign In</span>
                 </button>
-              </SignInButton>
+              </Link>
             )}
           </div>
         </div>

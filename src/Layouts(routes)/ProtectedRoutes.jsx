@@ -15,7 +15,7 @@ const ProtectedRoutes = ({children}) => {
     };
 
     if(!isSignedIn){
-      return <Navigate to="/login" />
+      return <Navigate to="/signin"  replace/>
     }  ;
     
  return  children;
