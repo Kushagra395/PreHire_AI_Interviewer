@@ -13,9 +13,9 @@ const [sheetOpen, setSheetOpen] = useState(false); // Controls mobile menu open/
 
   const routes = [
     { path: "/", name: "Home", icon: Home },
-    { path: "/interview", name: "Interview", icon: Mic },
-    { path: "/apply", name: "Apply", icon: Briefcase },
-    { path: "/about", name: "About", icon: User },
+    { path: "/interview", name: "Mock Interview", icon: Mic },
+    { path: "/Apply", name: "Apply", icon: Briefcase },
+    { path: "/About", name: "About", icon: User },
     { path: "/contact", name: "Contact", icon: Mail }
   ];
 
@@ -87,7 +87,7 @@ const [sheetOpen, setSheetOpen] = useState(false); // Controls mobile menu open/
                     )}>
                       <BotMessageSquare className="h-5 w-5 text-white" />
                     </div>
-                    <span className="text-xl font-bold bg-gradient-to-r from-purple-400 to-purple-100 bg-clip-text text-transparent">
+                    <span className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-purple-100 bg-clip-text text-transparent">
                       PreHire
                     </span>
                   </Link>
