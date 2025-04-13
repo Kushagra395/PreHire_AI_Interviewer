@@ -10,6 +10,7 @@ const SignUpPage = () => {
         signinUrl="/signin" // show a sign-up link below the sign-in form
       />
   </div>
+  
   )
 }
 

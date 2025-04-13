@@ -16,12 +16,10 @@ import Marquee  from "react-fast-marquee";
 import { BotMessageSquare } from "lucide-react";
 import { useNavigate } from "react-router";
 import Home_banner3 from "@/assets/Images/Home_banner3.png";
-import Home_banner4 from "@/assets/Images/Home_banner4.png";
-import Home_banner5 from "@/assets/Images/Home_banner5.png";
+
 
 export default function Home() {
-  const images = [Home_banner3, Home_banner4, Home_banner5];
- 
+  
 
  
   const navigate = useNavigate();
