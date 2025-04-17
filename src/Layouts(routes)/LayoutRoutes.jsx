@@ -13,6 +13,7 @@ import Interview from "@/Pages/TakeInterviewPage";
 import Contact from "@/Pages/ContactPage";
 import Home from "@/Pages/HomePage";
 import HomeLayout from "./HomeLayout";
+import CreateEditPage from "@/Pages/CreateEditPage";
 
 const LayoutRoutes = () => {
   return (
@@ -35,9 +36,12 @@ const LayoutRoutes = () => {
         {/* protected  routes here  */}
         <Route element={<ProtectedRoutes> <GeneralLayout></GeneralLayout></ProtectedRoutes>}>
         <Route path="/Apply" element={<Apply />} />
-        <Route path="/interview" element={<Interview />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/interview" element={<Interview />} />
+        <Route path="/interview/create" element={<CreateEditPage />} />
+        
        </Route>
+       
 
       </Routes>
 
