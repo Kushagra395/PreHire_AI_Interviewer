@@ -65,7 +65,7 @@ const FormMockInterview = ({ interview }) => {
       if (jsonArrayMatch) {
         cleanText = jsonArrayMatch[0];
       } else {
-        throw new Error("No JSON array found in response");
+       throw new Error("No JSON array found in response");
       }
   
       // Step 4: Parse the clean JSON text into an array of objects
@@ -120,44 +120,43 @@ const FormMockInterview = ({ interview }) => {
     
 
   const Onsubmit = async (data) => {
+  try {
     setloading(true);
-    try {
-        console.log(data);
-      if (interview) {
-        const aiFinalResult = await generateAiResponse(data)
-        const updatedData = {
-          ...data,
-         Questions: aiFinalResult,
-          updateAt: serverTimestamp(),
-        };
-        await updatedData(doc(db, "interviews", interview.id), updatedData);
-     }
-       else {
-        await addDoc(collection(db, "interviews"), data);
-      } 
-    if(isValid){
-        const aiFinalResult = await generateAiResponse(data)
-          await addDoc(collection(db,"interviews"),{
-          ...data,
-          userId,
-          question : aiFinalResult,
-          createdAt :serverTimestamp()
-        });
 
+    
+    const questions = await generateAiResponse(data);
 
-        
-      }
-      toast(gettoastMessage.title,{description:gettoastMessage.description});
-      navigate("/interview"), {replace:true};
-      setloading(false);
-    } catch (error) {
-      console.error(error);
-      toast.error("Error", {
-        description: "Something went wrong please try again",
+    if (interview) {
+       
+      const interviewRef = doc(db, "mockinterviews", interview.id);
+      await updateDoc(interviewRef, {
+        ...data,
+        questions,
       });
-      setloading(false);
+    } else {
+      
+      await addDoc(collection(db, "mockinterviews"), {
+        ...data,
+        userId,
+        questions,
+        createdAt: serverTimestamp(),
+      });
     }
-  };
+
+    toast.success(gettoastMessage.title, {
+      description: gettoastMessage.description,
+    });
+
+    navigate("/interviews", { replace: true });
+
+  } catch (error) {
+    console.error("Submission error:", error);
+    toast.error("Something went wrong!");
+  } finally {
+    setloading(false);
+  }
+};
+
 
   useEffect(() => {
     if (interview) {

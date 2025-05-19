@@ -11,9 +11,7 @@ const Interview = () => {
   const [loading,setloading]=useState(false);
   const {userId}= useAuth();
 
-  useEffect(()=>{
-    const 
-  })
+ 
   return (
     <> 
     <div className='flex w-full p-3 items-center justify-between'>
