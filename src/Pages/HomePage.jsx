@@ -78,7 +78,7 @@ export default function Home() {
             className="mt-8 md:mt-12 flex flex-col sm:flex-row gap-4 md:gap-6"
           >
             <button
-              onClick={() => navigate("/interview")}
+              onClick={() => navigate("/interviews")}
               className="px-7 py-4 md:px-7 md:py-4 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-base md:text-lg font-semibold transition-all duration-300 shadow-lg hover:scale-105"
             >
               Mock Interview

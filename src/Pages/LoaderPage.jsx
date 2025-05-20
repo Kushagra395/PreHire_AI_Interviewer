@@ -34,7 +34,7 @@ export default function LoaderPage({ message = "Loading" }) {
         }}
         className="text-center space-y-4"
       >
-        <Sparkles className="mx-auto h-6 w-6 text-amber-400" />
+       
         <h3 className="text-xl font-medium bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
           {message}
         </h3>

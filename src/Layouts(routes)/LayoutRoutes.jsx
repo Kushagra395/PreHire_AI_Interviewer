@@ -14,6 +14,8 @@ import Contact from "@/Pages/ContactPage";
 import Home from "@/Pages/HomePage";
 import HomeLayout from "./HomeLayout";
 import CreateEditPage from "@/Pages/CreateEditPage";
+import EditMockInterview from "@/Pages/EditMockInterview";
+import MainInterviewPage from "@/Pages/MainInterviewPage";
 
 const LayoutRoutes = () => {
   return (
@@ -37,8 +39,12 @@ const LayoutRoutes = () => {
         <Route element={<ProtectedRoutes> <GeneralLayout></GeneralLayout></ProtectedRoutes>}>
         <Route path="/Apply" element={<Apply />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/interview" element={<Interview />} />
+        <Route path="/interviews" element={<Interview />} />
         <Route path="/interview/create" element={<CreateEditPage />} />
+        <Route path="/interview/edit/:id" element={<EditMockInterview />} />
+         <Route path="/interview/:id" element={< MainInterviewPage />} />
+
+
         
        </Route>
        

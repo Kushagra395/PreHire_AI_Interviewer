@@ -13,7 +13,7 @@ const [sheetOpen, setSheetOpen] = useState(false); // Controls mobile menu open/
 
   const routes = [
     { path: "/", name: "Home", icon: Home },
-    { path: "/interview", name: "Mock Interview", icon: Mic },
+    { path: "/interviews", name: "Mock Interview", icon: Mic },
     { path: "/Apply", name: "Apply", icon: Briefcase },
     { path: "/About", name: "About", icon: User },
     { path: "/contact", name: "Contact", icon: Mail }
