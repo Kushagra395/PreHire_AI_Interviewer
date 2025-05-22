@@ -58,7 +58,7 @@ const Interview = () => {
         description="Create and Start your AI-Powered Interviews"
       />
       <Link to="/interview/create">
-        <Button className="bg-black m-2 hover:bg-violet-950 rounded-xl p-4 text-white">
+        <Button className="bg-black m-2 hover:bg-violet-600 rounded-xl p-4 text-white">
           <Plus /> Add Interview
         </Button>
       </Link>

@@ -173,7 +173,7 @@ const FormMockInterview = ({ interview }) => {
     <div className="w-full flex-col my-5 mx-5 space-y-4">
       <BreadCrumsCustom
         breadCrumbPage={breadCrumpPage}
-        breadCrumpItems={[{ label: "Mock Interviews", link: "/interview" }]}
+        breadCrumpItems={[{ label: "Mock Interviews", link: "/interviews" }]}
       />
       <div className="mt-4 flex items-center justify-between w-full">
         <HeaderInterview title={title} subheading />
