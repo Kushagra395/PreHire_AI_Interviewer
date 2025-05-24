@@ -15,6 +15,8 @@ import { cn } from "@/lib/utils";
 import { TooltipButton } from "./toot-tipButton";
 import { Eye, Newspaper, Sparkles, Trash2 } from "lucide-react";
 import DeleteInterview from "@/Pages/DeleteInterview";
+ 
+
 
 function InterviewPin({ interview, OnMockpage = false }) {
   const navigate = useNavigate();
@@ -73,16 +75,21 @@ function InterviewPin({ interview, OnMockpage = false }) {
     //   </CardFooter> */}
     // </Card>
 
-    <Card className="bg-white hover:bg-violet-50 shadow-xl">
-      <CardHeader>
-        <CardTitle className="text-xl font-bold">
-          {interview.position}
-        </CardTitle>
-        <CardDescription className="w-full">
-          {interview.description.substring(0, 120)}
-          {interview.description.length > 20 ? "..." : ""}
-        </CardDescription>
-      </CardHeader>
+  <Card
+  className={cn(
+    OnMockpage ? "bg-purple-50" : "bg-white hover:bg-violet-50 shadow-xl "
+  )}
+>
+  <CardHeader>
+    <CardTitle className="text-xl font-bold">
+      {interview.position}
+    </CardTitle>
+    <CardDescription className="w-full">
+      {OnMockpage ? interview.description : interview.description.substring(0, 120)}
+      {OnMockpage || interview.description.length <= 20 ? "" : "..."}
+    </CardDescription>
+  </CardHeader>
+  {/* ... rest of the code remains the same ... */}
       <CardContent>
         <div className=" mx-(-2) flex flex-wrap justify-start gap-2">
           {interview.techStack.split(",").map((word, index) => (
