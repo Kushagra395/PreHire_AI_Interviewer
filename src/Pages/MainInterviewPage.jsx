@@ -65,8 +65,8 @@ return (
       {interview && <InterviewPin interview={interview} OnMockpage />}
 
       <div className="w-full  ">
-        <Alert className="bg-sky-100 border border-sky-200 p-4 rounded-lg flex items-start gap-3">
-          <LightbulbIcon className="h-5 w-5 text-sky-600" />
+        <Alert className="bg-sky-100 border border-sky-200 p-4 rounded-lg flex items-start gap-2">
+          <LightbulbIcon className="h-4 w-4 b-0 p-0 text-sky-600" />
           <div>
             <AlertTitle className="text-sky-800 font-extrabold">Important Note</AlertTitle>
             <AlertDescription className="text-sm text-sky-700 mt-1 leading-relaxed">
@@ -74,17 +74,17 @@ return (
               finish the interview, you'll receive feedback comparing your
               responses with the ideal answers.
               <br />
-              <br />
+              
               <strong>Note:</strong>{" "}
-              <span className="font-medium">Your video is never recorded.</span>{" "}
-              You can disable the webcam anytime if preferred.
+              <span className="font-medium">•Your video is never recorded.</span>{" "}
+              •You can disable the webcam anytime if preferred.
             </AlertDescription>
           </div>
         </Alert>
 
         {/* Webcam Section Starts Here */}
         <div className="flex flex-col items-center justify-center w-full mt-6 gap-4">
-          <div className="relative w-full h-[300px] max-w-md aspect-video bg-white border border-gray-300 shadow-md rounded-xl flex items-center justify-center overflow-hidden transition-all duration-500 ease-in-out">
+          <div className="relative w-[400px] h-[400px] max-w-md aspect-video bg-white border border-gray-300 shadow-md rounded-xl flex items-center justify-center overflow-hidden transition-all duration-500 ease-in-out">
             {isWebCamEnable ? (
               <Webcam
                 onUserMedia={() => setIsWebCamEnable(true)}
