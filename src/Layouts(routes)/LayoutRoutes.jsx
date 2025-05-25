@@ -17,6 +17,7 @@ import CreateEditPage from "@/Pages/CreateEditPage";
 import EditMockInterview from "@/Pages/EditMockInterview";
 import MainInterviewPage from "@/Pages/MainInterviewPage";
 import StartInterviewQuestions from "@/Pages/StartInterviewQuestions";
+import FeedbackPage from "@/Pages/FeedbackPage";
 
 const LayoutRoutes = () => {
   return (
@@ -45,9 +46,11 @@ const LayoutRoutes = () => {
         <Route path="/interview/edit/:id" element={<EditMockInterview />} />
          <Route path="/interview/:id" element={< MainInterviewPage />} />
          <Route path="/interview/:id/start" element={< StartInterviewQuestions />} />
+         <Route path="/interview/feedback/:id" element={< FeedbackPage />} />
+
          
 
-
+/interview/feedback/
         
        </Route>
        
