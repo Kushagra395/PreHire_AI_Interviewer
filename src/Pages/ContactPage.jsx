@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@radix-ui/react-label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import bannerImage from '@/assets/Images/contactUsBanner1.png';
  import { toast } from "sonner";
  
 
@@ -38,7 +39,7 @@ export default function ContactUs() {
     <div className="px-2 min-h-screen bg-gradient-to-br from-[#0a0a14] to-[#221424] text-white">
       <div
         className="h-80 bg-cover bg-center relative"
-        style={{ backgroundImage: "url('../src/assets/Images/contactUsBanner1.png')" }}
+       style={{ backgroundImage: `url(${bannerImage})` }}
       >
         <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
           <h1 className="-mx-2 text-4xl font-bold text-white px-6 py-2 text-center">
