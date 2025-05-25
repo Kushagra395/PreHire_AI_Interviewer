@@ -15,6 +15,9 @@ import { cn } from "@/lib/utils";
 import { TooltipButton } from "./toot-tipButton";
 import { Eye, Newspaper, Sparkles, Trash2 } from "lucide-react";
 import DeleteInterview from "@/Pages/DeleteInterview";
+import { deleteDoc, doc } from "firebase/firestore";
+import { db } from "@/config/firebaseConfig";
+import { toast } from "sonner";
  
 
 
@@ -22,6 +25,18 @@ function InterviewPin({ interview, OnMockpage = false }) {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const { userId } = useAuth();
+  const handleDeleteInterview = async (interviewId) => {
+  if (!interviewId) return;
+
+  try {
+    await deleteDoc(doc(db, "mockinterviews", interviewId));
+    toast.success("Interview deleted successfully!");
+    navigate("/interviews", { replace: true });
+  } catch (error) {
+    console.error("Error deleting interview:", error);
+    toast.error("Failed to delete interview.");
+  }
+};
 
   // Function to convert Firestore Timestamp to readable date
   const formatDate = (timestamp) => {
@@ -35,46 +50,7 @@ function InterviewPin({ interview, OnMockpage = false }) {
   };
 
   return (
-    // <Card className="bg-white hover:bg-violet-50 shadow-xl">
-    //   <CardHeader>
-    //     <CardTitle className="text-xl font-bold">
-    //       {interview.position}
-    //     </CardTitle>
-    //     <CardDescription className="w-full">
-    //       {interview.description.substring(0, 120)}
-    //       {interview.description.length > 20 ? "..." : ""}
-    //     </CardDescription>
-    //   </CardHeader>
-
-    //     {interview.techStack.split(",").map((word, index) => (
-
-    //        <div className="flex item-center flex-w  gap-2">
-    //         <Badge
-    //           className="   bg-white text-black text-xs  hover:bg-violet-100 hover:border-violet-600"
-    //           key={index}
-    //           varient="outline"
-    //         >
-    //           {word}
-    //         </Badge>
-
-    //        </div>
-
-    //     ))}
-    //     {/* <p>Created at: {formatDate(interview.createdAt)}</p>
-    //     {interview.time && <p>Interview Time: {formatDate(interview.time)}</p>} */}
-
-    //   {/* <CardFooter>
-    //     <Button
-    //       onClick={() => {
-    //         navigate(`/takeinterview/${interview.id}`);
-    //       }}
-    //       disabled={loading}
-    //     >
-    //       {loading ? "Loading..." : "Take Interview"}
-    //     </Button>
-    //   </CardFooter> */}
-    // </Card>
-
+    
   <Card
   className={cn(
     OnMockpage ? "bg-purple-50" : "bg-white hover:bg-violet-50 shadow-xl "
@@ -160,15 +136,15 @@ function InterviewPin({ interview, OnMockpage = false }) {
               loading={false}
             />
 
-            <TooltipButton
-              content="Delete"
-              buttonVariant="ghost"
-              onClick={() => DeleteInterview(interview?.id, navigate)}
-              disbaled={false}
-              buttonClassName="hover:text-red-500"
-              icon={<Trash2 />}
-              loading={false}
-            />
+          <TooltipButton
+  content="Delete"
+  buttonVariant="ghost"
+  onClick={() => handleDeleteInterview(interview?.id)}
+  disabled={false}
+  buttonClassName="hover:text-red-500"
+  icon={<Trash2 />}
+  loading={false}
+/>
           </div>
         )}
       </CardFooter>

@@ -77,26 +77,36 @@ const FormMockInterview = ({ interview }) => {
     };
 
     const generateAiResponse = async (data) => {
-      const prompt = `
-      As an experienced prompt engineer, generate a JSON array containing 7 technical/related to job role interview questions (question can also be any past FAANG company questions too) (2 Easy ,3 medium ,2 Hard) 
-      along with detailed answers based on the following job information. Each object in the array should have the fields "question" and "answer", formatted as follows:
-    
-      [
-        { "question": "<Question text>", "answer": "<Answer text>" },
-        ...
-      ] in this manner only dont give in para form and keep space between each question and answer.
-    
-      Job Information:
-      - Job Position: ${data?.position}
-      - Job Description: ${data?.description}
-      - Years of Experience Required: ${data?.experience}
-      - Tech Stacks: ${data?.techStack}
-    
-      The questions should assess skills in ${data?.techStack} development and best practices, 
-      problem-solving, and experience handling complex requirements.
-       Please format the output strictly as an array of JSON objects without any additional labels, 
-       code blocks, or explanations. Return only the JSON array with questions and answers.
-      `;
+const prompt = `
+As an experienced prompt engineer, generate a JSON array containing 7 technical/related to job role interview questions (question can also be any past FAANG company questions too) (2 Easy, 3 Medium, 2 Hard) 
+along with detailed answers based on the following job information. Each object in the array should have the fields "question" and "answer", formatted as follows:
+
+[
+  { "question": "<Question text>", "answer": "<Answer text>" },
+  ...
+] in this manner only. Don't give in paragraph form and keep space between each question and answer.
+
+Job Information:
+- Job Position: ${data?.position}
+- Job Description: ${data?.description}
+- Years of Experience Required: ${data?.experience}
+- Tech Stacks: ${data?.techStack}
+
+The 7 questions should follow this structure:
+
+1. First 2 questions should be about the candidate’s previous experience — e.g., internships, previous projects, work done using ${data?.techStack}, and core skills.
+
+2. Next 2 questions should be practical-based, asking how the candidate would use ${data?.techStack} in real-world scenarios or upcoming projects, including basic understanding of ${data?.techStack}.
+
+3. Then 1 deep technical question involving a complex or advanced concept in ${data?.techStack}.
+
+4. Final 2 questions should assess why the candidate is a good fit for the role of ${data?.position}, including how they handle challenges, contribute to team success, and use tools like GitHub, CI/CD, etc.
+
+also consider the level of question based on candiadate 's experience level ${data?.experience} and always keep it easy and friendly interview
+
+Please format the output strictly as an array of JSON objects without any additional labels, code blocks, or explanations. Return only the JSON array with questions and answers.
+`;
+
       
       
   try {

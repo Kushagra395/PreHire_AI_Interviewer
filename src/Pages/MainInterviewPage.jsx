@@ -66,21 +66,23 @@ return (
 
       <div className="w-full  ">
         <Alert className="bg-sky-100 border border-sky-200 p-4 rounded-lg flex items-start gap-2">
-          <LightbulbIcon className="h-4 w-4 b-0 p-0 text-sky-600" />
-          <div>
-            <AlertTitle className="text-sky-800 font-extrabold">Important Note</AlertTitle>
-            <AlertDescription className="text-sm text-sky-700 mt-1 leading-relaxed">
-              Press "Record Answer" to begin answering the question. Once you
-              finish the interview, you'll receive feedback comparing your
-              responses with the ideal answers.
-              <br />
-              
-              <strong>Note:</strong>{" "}
-              <span className="font-medium">•Your video is never recorded.</span>{" "}
-              •You can disable the webcam anytime if preferred.
-            </AlertDescription>
-          </div>
-        </Alert>
+         <LightbulbIcon className="h-4 w-4 b-0 p-0 text-sky-600" />
+         <div>
+           <AlertTitle className="text-sky-800 font-extrabold">
+             Important Note
+           </AlertTitle>
+           <AlertDescription className="text-sm text-sky-700 mt-1 leading-relaxed">
+             Once you start the interview, Press "Record Answer" to begin answering the question. Once you finish the interview, stop the recording and save your result. 
+             You'll receive feedback comparing your responses with the ideal answers.{" "}
+             <strong>Note:</strong>{" "}
+             <span className="font-medium">
+               • Your video is never recorded.
+             </span>{" "}
+             • You can disable the webcam anytime if preferred.{" "}
+             <strong>• After saving, you will not be able to answer the same question again.</strong>
+           </AlertDescription>
+         </div>
+       </Alert>
 
         {/* Webcam Section Starts Here */}
         <div className="flex flex-col items-center justify-center w-full mt-6 gap-4">
