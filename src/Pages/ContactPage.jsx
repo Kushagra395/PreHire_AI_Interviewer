@@ -86,7 +86,7 @@ export default function ContactUs() {
             </div>
 
             <div>
-              <Label htmlFor="phone">Mobile Number (optional)</Label>
+              <Label htmlFor="phone">Mobile Number*</Label>
               <Input
                 id="phone"
                 type="tel"

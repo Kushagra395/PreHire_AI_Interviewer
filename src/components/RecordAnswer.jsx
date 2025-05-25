@@ -7,7 +7,6 @@ import {
   Mic,
   RefreshCw,
   Save,
-  SaveAll,
   Video,
   VideoOff,
 } from "lucide-react";
@@ -19,9 +18,9 @@ import Webcam from "react-webcam";
 import { chatSession } from "@/scripts";
 import { toast } from "sonner";
 import SaveModal from "./SaveModal";
-
 import { addDoc, collection, getDocs, query, serverTimestamp, where } from "firebase/firestore";
 import { db } from "@/config/firebaseConfig";
+import { Button } from "./button";
 
 const RecordAnswer = ({ question, setIsWebCamEnable, isWebCamEnable }) => {
   const {
@@ -41,187 +40,36 @@ const RecordAnswer = ({ question, setIsWebCamEnable, isWebCamEnable }) => {
   const [aiResult, setAiResult] = useState(null);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [sessionResults, setSessionResults] = useState([]);
-  const [isNewSession, setIsNewSession] = useState(false);
 
   const { userId } = useAuth();
   const { id } = useParams();
 
-  useEffect(() => {
-    if (error) {
-      console.error("Speech recognition error:", error);
-    }
-  }, [error]);
-
-  useEffect(() => {
-    // Combine final results with current interim result
-    const finalTranscript = results
-      .filter((result) => result.isFinal)
-      .map((result) => result.transcript)
-      .join(" ");
-
-    const currentTranscript = interimResult
-      ? `${finalTranscript} ${interimResult}`
-      : finalTranscript;
-
-    // Only update if we're in an active session
-    if (isRecording || isNewSession) {
-      setUserAnswer((prev) => {
-        // Reset if new session
-        if (isNewSession) {
-          setIsNewSession(false);
-          return currentTranscript;
-        }
-        return `${prev} ${currentTranscript}`.trim();
-      });
-    }
-  }, [results, interimResult, isRecording, isNewSession]);
-
-  // useEffect(() => {
-  //   // Combine all final results and the current interim result
-  //   const finalTranscript = results
-  //     .filter((result) => result.isFinal)
-  //     .map((result) => result.transcript)
-  //     .join(" ");
-
-  //   // Combine with interim result if available
-  //   const fullTranscript = interimResult
-  //     ? `${finalTranscript} ${interimResult}`
-  //     : finalTranscript;
-
-  //   setUserAnswer(fullTranscript);
-  // }, [results, interimResult]);
-
-  // const recordUserAnswer = async () => {
-  //   if (isRecording) {
-  //     stopSpeechToText();
-
-  //     // Wait a moment for the final results to be processed
-  //     await new Promise(resolve => setTimeout(resolve, 500));
-
-  //     if (userAnswer?.length < 30) {
-  //       toast.error("Error", {
-  //         description: "Your answer should be more than 30 characters",
-  //       });
-  //       return;
-  //     }
-
-  //     // ai result
-  //     const aiResult = await generateResult(
-  //       question.question,
-  //       question.answer,
-  //       userAnswer,
-  //       isWebCamEnable
-  //     );
-
-  //     console.log(aiResult)
-  //     setAiResult(aiResult);
-  //   } else {
-  //     // Clear previous results when starting new recording
-
-  //     startSpeechToText();
-  //   }
-  // };
-
   const recordUserAnswer = async () => {
     if (isRecording) {
       stopSpeechToText();
-      setIsNewSession(false);
 
-      // Wait for final processing
-      await new Promise((resolve) => setTimeout(resolve, 800));
-
-      // Get final answer from current state
-      const finalAnswer = userAnswer.replace(interimResult || "", "").trim();
-
-      if (finalAnswer.length < 30) {
-        toast.error("Answer should be more than 30 characters");
+      if (userAnswer.length < 30) {
+        toast.error("Error", { 
+          description: "Answer should be more than 30 characters",
+        });
         return;
       }
 
-      // Generate AI result with final answer
       const aiResult = await generateResult(
         question.question,
         question.answer,
-        finalAnswer,
+        userAnswer,
         isWebCamEnable
       );
-      console.log(aiResult);
       setAiResult(aiResult);
     } else {
-      // Start new session
-      setUserAnswer("");
-      setSessionResults([]);
-      setIsNewSession(true);
       startSpeechToText();
     }
   };
 
-  // const recordNewAnswer = () => {
-  //   setUserAnswer('');
-  //   setSessionResults([]);
-  //   stopSpeechToText();
-  //   setIsNewSession(true);
-  //   startSpeechToText();
-  // };
-  const saveUserAnswer = async () => {
-    setLoading(true);
-    if (!aiResult) {
-      return;
-    }
-
-    const currentQuestion = question.question;
-
-    try {
-      const userAnswerQuery = query(
-        collection(db, "userAnswers"),
-        where("userId", "==", userId),
-        where("question", "==", currentQuestion)
-      );
-      const querySnap = await getDocs(userAnswerQuery);
-
-      // if the user already answerd the question dont save it again
-      if (!querySnap.empty) {
-        console.log("Query Snap Size", querySnap.size);
-        toast.info("Already Answered", {
-          description: "You have already answered this question",
-        });
-        return;
-      } else {
-         // save the user answer
-        await addDoc(collection(db, "userAnswers"), {
-          mockIdRef: id,
-          question: question.question,
-          correct_ans: question.answer,
-          user_ans: userAnswer,
-          feedback: aiResult.feedback,
-          rating: aiResult.ratings,
-          userId,
-          createdAt: serverTimestamp(),
-        });
-
-        toast("Saved", { description: "Your answer has been saved.." });
-      }
-
-      setUserAnswer("");
-      stopSpeechToText();
-    } catch (error) {
-      console.error(error);
-      toast("Error", { description: "Failed to Generate Feedback." });
-    } finally {
-      setLoading(false);
-      setOpen(!open);
-    }
-  };
-
   const cleanResponse = (responseText) => {
-    // Step 1: Trim any surrounding whitespace
     let cleanText = responseText.trim();
-
-    // Step 2: Remove any occurrences of "json" or code block symbols (``` or `)
     cleanText = cleanText.replace(/(json|```|`)/g, "");
-
-    // Step 3: Parse the clean JSON text into an array of objects
     try {
       return JSON.parse(cleanText);
     } catch (error) {
@@ -248,15 +96,11 @@ const RecordAnswer = ({ question, setIsWebCamEnable, isWebCamEnable }) => {
 
     try {
       const aiResult = await chatSession.sendMessage(prompt);
-
-      const parsedResult = cleanResponse(aiResult.response.text());
-      return parsedResult;
+      return cleanResponse(aiResult.response.text());
     } catch (error) {
-      console.log(error);
-      toast("Error", {
-        description: "An error occurred while generating feedback.",
-      });
-      return { ratings: 0, feedback: "Unable to generate feedback" };
+      console.error(error);
+      toast.error("Failed to generate feedback");
+      return { ratings: 0, feedback: "Error generating feedback" };
     } finally {
       setIsAiGenerating(false);
     }
@@ -268,16 +112,99 @@ const RecordAnswer = ({ question, setIsWebCamEnable, isWebCamEnable }) => {
     startSpeechToText();
   };
 
+  const saveUserAnswer = async () => {
+    setLoading(true);
+    if (!aiResult) {
+      return;
+    }
+
+    const currentQuestion = question.question;
+
+    try {
+      const userAnswerQuery = query(
+        collection(db, "userAnswers"),
+        where("userId", "==", userId),
+        where("question", "==", currentQuestion)
+      );
+      const querySnap = await getDocs(userAnswerQuery);
+
+      if (!querySnap.empty) {
+        console.log("Query Snap Size", querySnap.size);
+        toast.info("Already Answered", {
+          description: "You have already answered this question",
+        });
+        return;
+      } else {
+        await addDoc(collection(db, "userAnswers"), {
+          mockIdRef: id,
+          question: question.question,
+          correct_ans: question.answer,
+          user_ans: userAnswer,
+          feedback: aiResult.feedback,
+          rating: aiResult.ratings,
+          userId,
+          createdAt: serverTimestamp(),
+        });
+
+        toast("Saved", { description: "Your answer has been saved.." });
+      }
+
+      setUserAnswer("");
+      stopSpeechToText();
+    } catch (error) {
+      console.error(error);
+      toast("Error", { description: "Failed to Generate Feedback." });
+    } finally {
+      setLoading(false);
+      setOpen(!open);
+    }
+  };
+
+  useEffect(() => {
+    const combineTranscripts = results
+      .filter((result) => typeof result !== "string")
+      .map((result) => result.transcript)
+      .join(" ");
+    setUserAnswer(combineTranscripts);
+  }, [results]);
+const handleFeedbackRedirect = async () => {
+  try {
+    const userAnswerQuery = query(
+      collection(db, "userAnswers"),
+      where("userId", "==", userId),
+      where("mockIdRef", "==", id)
+    );
+    const querySnap = await getDocs(userAnswerQuery);
+
+    const totalAnswered = querySnap.size;
+    const totalQuestions = question.total; // Ensure this prop is passed to the component
+
+    if (totalAnswered < totalQuestions) {
+      toast.error("Answer all questions first", {
+        description: `You have answered ${totalAnswered} out of ${totalQuestions} questions`,
+      });
+    } else {
+      // Navigate to feedback page
+      window.location.href = `/interview/feedback/${id}`;
+    }
+  } catch (error) {
+    console.error("Error checking answers:", error);
+    toast.error("Error", { description: "Something went wrong." });
+  }
+};
+
+  
+ 
   return (
     <>
-      <div className="w-full flex flex-col items-center gap-8 mt-4">
+      <div className="w-full flex flex-col items-center gap-4 md:gap-8 mt-2 md:mt-4">
         <SaveModal
           isOpen={open}
           onClose={() => setOpen(false)}
           loading={loading}
           onConfirm={saveUserAnswer}
         />
-        <div className="relative w-[350px] h-[350px] max-w-md aspect-video bg-white border border-gray-300 shadow-md rounded-xl flex items-center justify-center overflow-hidden transition-all duration-500 ease-in-out">
+        <div className="relative w-full max-w-[350px] h-[250px] md:h-[350px] aspect-video bg-white border border-gray-300 shadow-md rounded-xl flex items-center justify-center overflow-hidden transition-all duration-500 ease-in-out">
           {isWebCamEnable ? (
             <Webcam
               onUserMedia={() => setIsWebCamEnable(true)}
@@ -286,15 +213,16 @@ const RecordAnswer = ({ question, setIsWebCamEnable, isWebCamEnable }) => {
             />
           ) : (
             <div className="flex flex-col items-center justify-center text-center text-gray-500 px-4">
-              <CameraOff className="w-16 h-16 mb-3 text-gray-400" />
+              <CameraOff className="w-12 h-12 md:w-16 md:h-16 mb-2 md:mb-3 text-gray-400" />
               <p className="text-sm font-medium">Webcam is disabled</p>
               <p className="text-xs text-muted-foreground">
-                Click the below Camera to enable Webcam & Mic for answering
+                Click the camera icon to enable Webcam & Mic
               </p>
             </div>
           )}
         </div>
-        <div className="flex items-center justify-center gap-3">
+        
+        <div className="flex flex-wrap items-center justify-center gap-2 md:gap-3 w-full px-2">
           <TooltipButton
             content={isWebCamEnable ? "Turn Off" : "Turn On"}
             icon={
@@ -324,6 +252,7 @@ const RecordAnswer = ({ question, setIsWebCamEnable, isWebCamEnable }) => {
             icon={<RefreshCw className="min-w-5 min-h-5" />}
             onClick={recordNewAnswer}
           />
+          
           <TooltipButton
             content="Save Result"
             icon={
@@ -338,23 +267,31 @@ const RecordAnswer = ({ question, setIsWebCamEnable, isWebCamEnable }) => {
           />
         </div>
 
-        <div className="w-full -my-5 text-xs text-muted-foreground text-red-500">
-          {" "}
-          * stop recording once done with answer
+        <div className="w-full text-xs text-center text-muted-foreground text-red-500 px-2">
+          * Stop recording once done with answer
         </div>
-        <div className="w-full mt-0 p-4 border rounded-md bg-gray-50">
-          <h2 className="text-lg font-bold">Your Answer:</h2>
-          <p className="text-sm mt-2 text-green-900 whitespace-normal">
+        
+        <div className="w-full p-3 md:p-4 border rounded-md bg-gray-50">
+          <h2 className="text-base md:text-lg font-bold">Your Answer:</h2>
+          <p className="text-sm mt-1 md:mt-2 text-green-900 whitespace-normal break-words">
             {userAnswer || "Start recording to see your answer here"}
           </p>
 
-          {interimResult &&
-            !results.some((r) => r.transcript.includes(interimResult)) && (
-              <p className="text-sm text-gray-400 mt-2">
-                <strong>Current Speech:</strong> {interimResult}
-              </p>
-            )}
+          {interimResult && (
+            <p className="text-xs md:text-sm text-gray-400 mt-1 md:mt-2">
+              <strong>Current Speech:</strong> {interimResult}
+            </p>
+          )}
         </div>
+       <div className=" md:-my-4 w-full text-end px-3 text-xs text-muted-foreground text-red-500 mb-1">
+  * Click Feedback Once Done with all 7 Questions
+</div>
+<div className=" md:-my-1  w-full text-end px-3 md:px-4">
+  <Button onClick={handleFeedbackRedirect}>
+    Feedback
+  </Button>
+</div>
+ 
       </div>
     </>
   );

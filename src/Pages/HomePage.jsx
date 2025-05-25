@@ -10,6 +10,7 @@ import LOGO7 from "../assets/Images/Logos/logo7.png";
 import LOGO8 from "../assets/Images/Logos/logo8.png";
 import LOGO9 from "../assets/Images/Logos/logo9.png";
 import LOGO10 from "../assets/Images/Logos/logo10.png";
+import LOGO11 from "../assets/Images/Logos/logo11.png";
 import { cn } from "@/lib/utils";
 import Marquee from "react-fast-marquee";
 import { BotMessageSquare } from "lucide-react";
@@ -95,7 +96,7 @@ export default function Home() {
       <div>
         <div className="py-4 md:py-8">
           <Marquee pauseOnHover gradient={false} speed={80}>
-            {[LOGO8, LOGO2, LOGO10, LOGO4, LOGO7, LOGO6, LOGO3, LOGO1, LOGO5].map(
+            {[LOGO8, LOGO2, LOGO10, LOGO4, LOGO7,LOGO11, LOGO6, LOGO3, LOGO1, LOGO5, LOGO9].map(
               (logo, index) => (
                 <img
                   key={index}

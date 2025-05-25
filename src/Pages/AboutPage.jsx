@@ -12,7 +12,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-const words = ["Practice", "Prepare", "Get Placed"];
+const words = ["Practice", "Prepare", "Placed"];
 const banners = [banner1, banner2, banner3];
 
 export default function About() {
