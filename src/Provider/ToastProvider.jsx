@@ -9,4 +9,4 @@ export const ToasterProvider = () => {
       className="bg-neutral-100 shadow-lg"
     />
   );
-};
+}; 

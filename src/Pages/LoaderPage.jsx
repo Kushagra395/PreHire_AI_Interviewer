@@ -58,4 +58,4 @@ export default function LoaderPage({ message = "Loading" }) {
       </motion.div>
     </div>
   );
-}
+} 

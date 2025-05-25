@@ -108,7 +108,7 @@ export default function Home() {
             )}
           </Marquee>
         </div>
-
+ 
         {/* Banner Section */}
         <div className=" flex px-4 bg-gray-950">
           <div className="relative max-w-7xl mx-auto">

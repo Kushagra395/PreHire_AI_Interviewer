@@ -8,23 +8,35 @@ import { useAuth } from "@clerk/clerk-react";
 import { Heading, Trash2Icon } from "lucide-react";
 import { toast } from "sonner";
 import { db } from "@/config/firebaseConfig";
-import { addDoc, collection, doc, serverTimestamp, updateDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  serverTimestamp,
+  updateDoc,
+} from "firebase/firestore";
 import HeaderInterview from "./HeaderInterview";
-import { Separator } from "@/components/ui/separator"
+import { Separator } from "@/components/ui/separator";
 import { Button } from "./button";
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "./ui/form";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import LoaderPage from "@/Pages/LoaderPage";
 import { chatSession } from "@/scripts";
 
-
 const formSchema = z.object({
+  //form requirement
   position: z
     .string()
     .min(1, "Position is required")
     .max(100, "Position must be 100 characters or less"),
-  description: z.string().min(5 , "Description is required"),
+  description: z.string().min(5, "Description is required"),
   experience: z.coerce
     .number()
     .min(0, "Experience cannot be empty or negative"),
@@ -44,40 +56,40 @@ const FormMockInterview = ({ interview }) => {
 
   const title = interview ? interview.position : "Create a new mock interview";
 
-  const breadCrumpPage = interview ? interview?.position : "Create";
+  const breadCrumpPage = interview ? interview?.position : "Create"; //breadcrumb
 
   const actions = interview ? "Save Changes" : "Create";
-  const gettoastMessage =  interview
+  const gettoastMessage = interview
     ? { title: "Updated..!", description: "Changes saved successfully..." }
     : { title: "Created..!", description: "New Mock Interview created..." };
 
+  const cleanResponse = (responseText) => {
+    //cleaning response
+    // Step 1: Trim any surrounding whitespace
+    let cleanText = responseText.trim();
 
+    // Step 2: Remove any occurrences of "json" or code block symbols (``` or `)
+    cleanText = cleanText.replace(/(json|```|`)/g, "");
 
-    const cleanResponse = (responseText) => {
-      // Step 1: Trim any surrounding whitespace
-      let cleanText = responseText.trim();
-  
-      // Step 2: Remove any occurrences of "json" or code block symbols (``` or `)
-      cleanText = cleanText.replace(/(json|```|`)/g, "");
-  
-      // Step 3: Extract a JSON array by capturing text between square brackets
-      const jsonArrayMatch = cleanText.match(/\[.*\]/s);
-      if (jsonArrayMatch) {
-        cleanText = jsonArrayMatch[0];
-      } else {
-       throw new Error("No JSON array found in response");
-      }
-  
-      // Step 4: Parse the clean JSON text into an array of objects
-      try {
-        return JSON.parse(cleanText);
-      } catch (error) {
-        throw new Error("Invalid JSON format: " + (error)?.message);
-      }
-    };
+    // Step 3: Extract a JSON array by capturing text between square brackets
+    const jsonArrayMatch = cleanText.match(/\[.*\]/s);
+    if (jsonArrayMatch) {
+      cleanText = jsonArrayMatch[0];
+    } else {
+      throw new Error("No JSON array found in response");
+    }
 
-    const generateAiResponse = async (data) => {
-const prompt = `
+    // Step 4: Parse the clean JSON text into an array of objects
+    try {
+      return JSON.parse(cleanText);
+    } catch (error) {
+      throw new Error("Invalid JSON format: " + error?.message);
+    }
+  };
+
+  const generateAiResponse = async (data) => {
+    //generating ai response
+    const prompt = `
 As an experienced prompt engineer, generate a JSON array containing 7 technical/related to job role interview questions (question can also be any past FAANG company questions too) (2 Easy, 3 Medium, 2 Hard) 
 along with detailed answers based on the following job information. Each object in the array should have the fields "question" and "answer", formatted as follows:
 
@@ -107,66 +119,52 @@ also consider the level of question based on candiadate 's experience level ${da
 Please format the output strictly as an array of JSON objects without any additional labels, code blocks, or explanations. Return only the JSON array with questions and answers.
 `;
 
-      
-      
-  try {
-    const airesult = await chatSession.sendMessage(prompt);
-    const AiResultText= airesult.response.text()
-    const cleanAiResponse = cleanResponse(AiResultText);
+    try {
+      const airesult = await chatSession.sendMessage(prompt);
+      const AiResultText = airesult.response.text();
+      const cleanAiResponse = cleanResponse(AiResultText);
 
-    console.log(cleanAiResponse)
-    return cleanAiResponse
-
-
-    
-    
-    
-    
-  } catch (error) {
-    console.error("AI Error:", error);
-    throw error;
-  }
-};
-    
+      console.log(cleanAiResponse);
+      return cleanAiResponse;
+    } catch (error) {
+      console.error("AI Error:", error);
+      throw error;
+    }
+  };
 
   const Onsubmit = async (data) => {
-  try {
-    setloading(true);
+    try {
+      setloading(true);
 
-    
-    const questions = await generateAiResponse(data);
+      const questions = await generateAiResponse(data);
 
-    if (interview) {
-       
-      const interviewRef = doc(db, "mockinterviews", interview.id);
-      await updateDoc(interviewRef, {
-        ...data,
-        questions,
+      if (interview) {
+        const interviewRef = doc(db, "mockinterviews", interview.id); //making doc
+        await updateDoc(interviewRef, {
+          ...data,
+          questions,
+        });
+      } else {
+        await addDoc(collection(db, "mockinterviews"), {//adding in doc
+          ...data,
+          userId,
+          questions,
+          createdAt: serverTimestamp(),
+        });
+      }
+
+      toast.success(gettoastMessage.title, { //toast raised
+        description: gettoastMessage.description,
       });
-    } else {
-      
-      await addDoc(collection(db, "mockinterviews"), {
-        ...data,
-        userId,
-        questions,
-        createdAt: serverTimestamp(),
-      });
+
+      navigate("/interviews", { replace: true });
+    } catch (error) {
+      console.error("Submission error:", error);
+      toast.error("Something went wrong!");
+    } finally {
+      setloading(false);
     }
-
-    toast.success(gettoastMessage.title, {
-      description: gettoastMessage.description,
-    });
-
-    navigate("/interviews", { replace: true });
-
-  } catch (error) {
-    console.error("Submission error:", error);
-    toast.error("Something went wrong!");
-  } finally {
-    setloading(false);
-  }
-};
-
+  };
 
   useEffect(() => {
     if (interview) {
@@ -178,147 +176,148 @@ Please format the output strictly as an array of JSON objects without any additi
       });
     }
   }, [interview, form]);
-  return (<> 
-  <div className="m-6"> 
-    <div className="w-full flex-col my-5 mx-5 space-y-4">
-      <BreadCrumsCustom
-        breadCrumbPage={breadCrumpPage}
-        breadCrumpItems={[{ label: "Mock Interviews", link: "/interviews" }]}
-      />
-      <div className="mt-4 flex items-center justify-between w-full">
-        <HeaderInterview title={title} subheading />
-        {interview && (
-          <Button variant={"ghost"}>
-            <Trash2Icon className="mr-2 h-4 w-4 text-red-600" />
-          </Button>
-        )}
-        
-      </div>
-      
-    </div>
-    <Separator className="my-2"/>
-    <FormProvider {...form}>
-        <form
-          onSubmit={form.handleSubmit(Onsubmit)}
-          className="w-full p-8 rounded-lg flex-col flex items-start justify-start gap-6 shadow-md "
-        >
-          <FormField
-            control={form.control}
-            name="position"
-            render={({ field }) => (
-              <FormItem className="w-full space-y-4">
-                <div className="w-full flex items-center justify-between">
-                  <FormLabel className={"font-semibold"}>Job Role / Job Position</FormLabel>
-                  <FormMessage className="text-sm" />
-                </div>
-                <FormControl>
-                  <Input
-                    className="h-12  "
-                    disabled={loading}
-                    placeholder="eg:- Full Stack Developer"
-                    {...field}
-                    value={field.value || ""}
-                  />
-                </FormControl>
-              </FormItem>
-            )}
+  return (
+    <>
+      <div className="m-6">
+        <div className="w-full flex-col my-5 mx-5 space-y-4">
+          <BreadCrumsCustom
+            breadCrumbPage={breadCrumpPage}
+            breadCrumpItems={[
+              { label: "Mock Interviews", link: "/interviews" },
+            ]}
           />
-
-          <FormField
-            control={form.control}
-            name="description"
-            render={({ field }) => (
-              <FormItem className="w-full space-y-4">
-                <div className="w-full flex items-center justify-between">
-                  <FormLabel className={"font-semibold"}>Job Description</FormLabel>
-                  <FormMessage className="text-sm" />
-                </div>
-                <FormControl>
-                  <Textarea
-                    className="h-12"
-                    disabled={loading}
-                    placeholder="eg:- describle your job role"
-                    {...field}
-                    value={field.value || ""}
-                  />
-                </FormControl>
-              </FormItem>
+          <div className="mt-4 flex items-center justify-between w-full">
+            <HeaderInterview title={title} subheading />
+            {interview && (
+              <Button variant={"ghost"}>
+                <Trash2Icon className="mr-2 h-4 w-4 text-red-600" />
+              </Button>
             )}
-          />
-
-          <FormField
-            control={form.control}
-            name="experience"
-            render={({ field }) => (
-              <FormItem className="w-full space-y-4">
-                <div className="w-full flex items-center justify-between">
-                  <FormLabel className={"font-semibold"}>Years of Experience</FormLabel>
-                  <FormMessage className="text-sm" />
-                </div>
-                <FormControl>
-                  <Input
-                    type="number"
-                    className="h-12"
-                    disabled={loading}
-                    placeholder="eg:- 5 Years"
-                    {...field}
-                    value={field.value || ""}
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="techStack"
-            render={({ field }) => (
-              <FormItem className="w-full space-y-4">
-                <div className="w-full flex items-center justify-between">
-                  <FormLabel className={"font-semibold"}>Tech Stacks</FormLabel>
-                  <FormMessage className="text-sm" />
-                </div>
-                <FormControl>
-                  <Textarea
-                    className="h-12"
-                    disabled={loading}
-                    placeholder="eg:- React, Typescript..."
-                    {...field}
-                    value={field.value || ""}
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-
-          <div className="w-full flex items-center justify-end gap-6">
-            <Button
-              type="reset"
-              size={"sm"}
-              variant={"outline"}
-              disabled={isSubmitted || loading}
-            >
-              Reset
-            </Button>
-            <Button
-              type="submit"
-              size={"sm"}
-              disabled={isSubmitted || !isValid || loading}
-            >
-              {loading ? (
-                <LoaderPage className =" w-full" />
-              ) : (
-                actions
-              )}
-            </Button>
           </div>
-        </form>
-      </FormProvider>
+        </div>
+        <Separator className="my-2" />
+        <FormProvider {...form}>
+          <form
+            onSubmit={form.handleSubmit(Onsubmit)}
+            className="w-full p-8 rounded-lg flex-col flex items-start justify-start gap-6 shadow-md "
+          >
+            <FormField
+              control={form.control}
+              name="position"
+              render={({ field }) => (
+                <FormItem className="w-full space-y-4">
+                  <div className="w-full flex items-center justify-between">
+                    <FormLabel className={"font-semibold"}>
+                      Job Role / Job Position
+                    </FormLabel>
+                    <FormMessage className="text-sm" />
+                  </div>
+                  <FormControl>
+                    <Input
+                      className="h-12  "
+                      disabled={loading}
+                      placeholder="eg:- Full Stack Developer"
+                      {...field}
+                      value={field.value || ""}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
 
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem className="w-full space-y-4">
+                  <div className="w-full flex items-center justify-between">
+                    <FormLabel className={"font-semibold"}>
+                      Job Description
+                    </FormLabel>
+                    <FormMessage className="text-sm" />
+                  </div>
+                  <FormControl>
+                    <Textarea
+                      className="h-12"
+                      disabled={loading}
+                      placeholder="eg:- describle your job role"
+                      {...field}
+                      value={field.value || ""}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
 
+            <FormField
+              control={form.control}
+              name="experience"
+              render={({ field }) => (
+                <FormItem className="w-full space-y-4">
+                  <div className="w-full flex items-center justify-between">
+                    <FormLabel className={"font-semibold"}>
+                      Years of Experience
+                    </FormLabel>
+                    <FormMessage className="text-sm" />
+                  </div>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      className="h-12"
+                      disabled={loading}
+                      placeholder="eg:- 5 Years"
+                      {...field}
+                      value={field.value || ""}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
 
+            <FormField
+              control={form.control}
+              name="techStack"
+              render={({ field }) => (
+                <FormItem className="w-full space-y-4">
+                  <div className="w-full flex items-center justify-between">
+                    <FormLabel className={"font-semibold"}>
+                      Tech Stacks
+                    </FormLabel>
+                    <FormMessage className="text-sm" />
+                  </div>
+                  <FormControl>
+                    <Textarea
+                      className="h-12"
+                      disabled={loading}
+                      placeholder="eg:- React, Typescript..."
+                      {...field}
+                      value={field.value || ""}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
 
-    </div>
+            <div className="w-full flex items-center justify-end gap-6">
+              <Button
+                type="reset"
+                size={"sm"}
+                variant={"outline"}
+                disabled={isSubmitted || loading}
+              >
+                Reset
+              </Button>
+              <Button
+                type="submit"
+                size={"sm"}
+                disabled={isSubmitted || !isValid || loading}
+              >
+                {loading ? <LoaderPage className=" w-full" /> : actions}
+              </Button>
+            </div>
+          </form>
+        </FormProvider>
+      </div>
     </>
   );
 };

@@ -13,7 +13,7 @@ const ProtectedRoutes = ({children}) => {
   if(!isLoaded){
      return  <LoaderPage/>
     };
-
+ 
     if(!isSignedIn){
       return <Navigate to="/signin"  replace/>
     }  ;

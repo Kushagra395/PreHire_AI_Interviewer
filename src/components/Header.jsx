@@ -11,7 +11,7 @@ const navigate = useNavigate(); // Helps move between pages
 const { isSignedIn } = useUser(); // Checks if user is logged in
 const [sheetOpen, setSheetOpen] = useState(false); // Controls mobile menu open/close
 
-  const routes = [
+  const routes = [ //routes for navigation
     { path: "/", name: "Home", icon: Home },
     { path: "/interviews", name: "Mock Interview", icon: Mic },
     { path: "/Apply", name: "Apply", icon: Briefcase },

@@ -15,6 +15,6 @@ const GeneralLayout = () => {
       <Footer/>
     </div>
   )
-}
+} 
 
 export default GeneralLayout

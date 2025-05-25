@@ -93,7 +93,7 @@ return (
                 onUserMediaError={() => setIsWebCamEnable(false)}
                 className="w-full h-full object-cover"
               />
-            ) : (
+            ) : ( 
               <div className="flex flex-col items-center justify-center text-center text-gray-500 px-4">
                 <CameraOff className="w-16 h-16 mb-3 text-gray-400" />
                 <p className="text-sm font-medium">Webcam is disabled</p>

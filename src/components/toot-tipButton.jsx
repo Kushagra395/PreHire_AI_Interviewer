@@ -16,6 +16,7 @@ import LoaderPage from "@/Pages/LoaderPage";
 
 export const TooltipButton = ({
   content,
+  
   icon,
   onClick,
   buttonVariant = "ghost",

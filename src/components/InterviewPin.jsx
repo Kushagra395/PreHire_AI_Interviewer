@@ -29,7 +29,7 @@ function InterviewPin({ interview, OnMockpage = false }) {
   if (!interviewId) return;
 
   try {
-    await deleteDoc(doc(db, "mockinterviews", interviewId));
+    await deleteDoc(doc(db, "mockinterviews", interviewId)); //delete from database too
     toast.success("Interview deleted successfully!");
     navigate("/interviews", { replace: true });
   } catch (error) {

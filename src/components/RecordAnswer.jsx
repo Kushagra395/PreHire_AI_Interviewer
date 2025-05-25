@@ -44,7 +44,7 @@ const RecordAnswer = ({ question, setIsWebCamEnable, isWebCamEnable }) => {
   const { userId } = useAuth();
   const { id } = useParams();
 
-  const recordUserAnswer = async () => {
+  const recordUserAnswer = async () => { // record useranswer from currentspeech
     if (isRecording) {
       stopSpeechToText();
 

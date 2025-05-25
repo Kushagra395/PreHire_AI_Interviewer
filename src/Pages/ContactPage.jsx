@@ -89,7 +89,7 @@ export default function ContactUs() {
               <Label htmlFor="phone">Mobile Number*</Label>
               <Input
                 id="phone"
-                type="tel"
+                type="tel" 
                 placeholder="Enter your mobile number"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}

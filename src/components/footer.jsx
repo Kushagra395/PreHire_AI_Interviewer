@@ -40,7 +40,7 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* About and Project Links side by side */}
+          {/* About and Project Links side by side  */}
           <div className="grid grid-cols-2 gap-6 mb-8">
             <div className="space-y-2">
               <h3 className="font-semibold text-gray-300 mb-2">About</h3>

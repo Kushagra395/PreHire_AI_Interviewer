@@ -20,7 +20,7 @@ const AuthHanlder = () => {
     const storeUserData = async () => {
       if (isSignedIn && user) {
         setLoading(true);
-        try {
+         try {
           const userSanp = await getDoc(doc(db, "users", user.id));
           
           if (!userSanp.exists()) {

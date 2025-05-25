@@ -9,4 +9,4 @@ export const chatSession = model.startChat({
     responseMimeType: 'application/json',
   },
 });
-// console. log(response. text());
+// console. log(response. text()); 

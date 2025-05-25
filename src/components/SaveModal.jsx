@@ -16,7 +16,7 @@ const SaveModal = ({ title, description, isOpen, onClose, children,loading, onCo
         </Button>
         <Button
           disabled={loading}
-          className="bg-emerald-600 hover:bg-emerald-800"
+         className="bg-emerald-600 hover:bg-emerald-800"
           onClick={onConfirm}
         >
           Continue

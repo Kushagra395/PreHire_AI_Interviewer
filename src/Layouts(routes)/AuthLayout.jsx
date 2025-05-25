@@ -16,7 +16,7 @@ const AuthLayout = () => {
       </video>
       
       {/* Dark overlay */}
-      <div className="absolute inset-0  bg-opacity-50">
+       <div className="absolute inset-0  bg-opacity-50">
          
       </div>
       

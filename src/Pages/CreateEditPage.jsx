@@ -34,7 +34,7 @@ const interviewId = searchParams.get("interviewId");
 <FormMockInterview interview={interview}/>
 
 
-
+ 
   </div>;
 };
 

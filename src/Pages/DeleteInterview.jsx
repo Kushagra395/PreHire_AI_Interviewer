@@ -36,7 +36,7 @@ const DeleteInterview = ({ interviewId }) => {
           onChange={() => setConfirm(!confirm)}
         />
         <span>Are you sure you want to delete this interview?</span>
-      </label>
+      </label> 
 
       <button
         onClick={handleDelete}

@@ -80,7 +80,7 @@ const StartInterviewQuestions = () => {
             <QuestionForm questions={interview?.questions} />
           </div>
         )}
-      </div>
+      </div> 
     </>
   );
 };

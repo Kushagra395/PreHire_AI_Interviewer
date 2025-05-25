@@ -23,7 +23,7 @@ const Apply = () => {
       color: "#f59e0b",
       link: "https://wellfound.com",
       stats: "30K+ hiring companies"
-    },
+    }, 
       {
      name: "GitHub Jobs",
   Icon: Github,

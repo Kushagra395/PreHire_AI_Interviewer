@@ -71,7 +71,7 @@ const QuestionForm = ({ questions }) => {
 
             <div className="w-full flex items-center justify-end mt-2 md:mt-0">
               <TooltipButton
-                content={isPlaying ? "Stop" : "Start"}
+                 content={isPlaying ? "Stop" : "Start"}
                 icon={
                   isPlaying ? (
                     <VolumeX className="w-4 h-4 md:w-5 md:h-5 text-muted-foreground" />
