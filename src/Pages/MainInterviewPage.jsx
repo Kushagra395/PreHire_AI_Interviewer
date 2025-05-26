@@ -85,34 +85,44 @@ return (
        </Alert>
 
         {/* Webcam Section Starts Here */}
-        <div className="flex flex-col items-center justify-center w-full mt-6 gap-4">
-          <div className="relative w-[400px] h-[400px] max-w-md aspect-video bg-white border border-gray-300 shadow-md rounded-xl flex items-center justify-center overflow-hidden transition-all duration-500 ease-in-out">
-            {isWebCamEnable ? (
-              <Webcam
-                onUserMedia={() => setIsWebCamEnable(true)}
-                onUserMediaError={() => setIsWebCamEnable(false)}
-                className="w-full h-full object-cover"
-              />
-            ) : ( 
-              <div className="flex flex-col items-center justify-center text-center text-gray-500 px-4">
-                <CameraOff className="w-16 h-16 mb-3 text-gray-400" />
-                <p className="text-sm font-medium">Webcam is disabled</p>
-                <p className="text-xs text-muted-foreground">
-                  Click the button below to enable
-                </p>
-              </div>
-            )}
-          </div>
+       <div className="flex flex-col items-center justify-center w-full mt-6 gap-4">
+  {/* Webcam container - responsive sizing */}
+  <div className="relative w-[400px] h-[400px] max-w-full md:max-w-md aspect-video bg-white border border-gray-300 shadow-md rounded-xl flex items-center justify-center overflow-hidden transition-all duration-500 ease-in-out">
+    {isWebCamEnable ? (
+      <Webcam
+        onUserMedia={() => setIsWebCamEnable(true)}
+        onUserMediaError={() => setIsWebCamEnable(false)}
+        className="w-full h-full object-cover"
+      />
+    ) : ( 
+      <div className="flex flex-col items-center justify-center text-center text-gray-500 px-4">
+        <CameraOff className="w-12 h-12 md:w-16 md:h-16 mb-3 text-gray-400" />
+        <p className="text-sm font-medium">Webcam is disabled</p>
+        <p className="text-xs text-muted-foreground">
+          {window.innerWidth < 768 ? "Tap" : "Click"} the button below to enable
+        </p>
+      </div>
+    )}
+  </div>
 
-          <Button
-            onClick={() => setIsWebCamEnable(!isWebCamEnable)}
-            className="hover:bg-violet-500 bg-black text-white rounded-md px-2 my-2 py-2"
-          >
-            <WebcamIcon className="ml-2 h-4 w-4" />
-            {isWebCamEnable ? "Disable Webcam" : "Enable Webcam"}
-             
-          </Button>
-        </div>
+  {/* Button - full width on mobile only */}
+  <Button
+    onClick={() => setIsWebCamEnable(!isWebCamEnable)}
+    className="hover:bg-violet-500 bg-black text-white rounded-md px-4 py-2 w-full md:w-auto"
+  >
+    {isWebCamEnable ? (
+      <>
+        <CameraOff className="h-4 w-4 mr-2" />
+        Disable Webcam
+      </>
+    ) : (
+      <>
+        <Camera className="h-4 w-4 mr-2" />
+        Enable Webcam
+      </>
+    )}
+  </Button>
+</div>
         {/* Webcam Section Ends Here */}
       </div>
     </div>

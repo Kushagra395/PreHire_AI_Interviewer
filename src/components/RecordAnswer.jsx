@@ -222,48 +222,67 @@ const handleFeedbackRedirect = async () => {
           )}
         </div>
         
-        <div className="flex flex-wrap items-center justify-center gap-2 md:gap-3 w-full px-2">
-          <TooltipButton
-            content={isWebCamEnable ? "Turn Off" : "Turn On"}
-            icon={
-              isWebCamEnable ? (
-                <VideoOff className="min-w-5 min-h-5" />
-              ) : (
-                <Video className="min-w-5 min-h-5" />
-              )
-            }
-            onClick={() => setIsWebCamEnable(!isWebCamEnable)}
-          />
+        <div className="flex items-center justify-center gap-1 p-1 rounded-lg bg-gray-100 bg-gray-100 gap-2 md:gap-3  px-2">
+           <TooltipButton
+    content={isWebCamEnable ? "Turn Off" : "Turn On"}
+    buttonVariant="default"
+    buttonClassName={
+      isWebCamEnable 
+        ? "bg-red-100 hover:bg-red-200 text-red-700" 
+        : "bg-green-100 hover:bg-green-200 text-green-700"
+    }
+    icon={
+      isWebCamEnable ? (
+        <VideoOff className="min-w-5 min-h-5" />
+      ) : (
+        <Video className="min-w-5 min-h-5" />
+      )
+    }
+    onClick={() => setIsWebCamEnable(!isWebCamEnable)}
+  />
 
-          <TooltipButton
-            content={isRecording ? "Stop Recording" : "Start Recording"}
-            icon={
-              isRecording ? (
-                <Disc3Icon className="min-w-5 min-h-5 animate-spin" />
-              ) : (
-                <Mic className="min-w-5 min-h-5" />
-              )
-            }
-            onClick={recordUserAnswer}
-          />
+  {/* Recording Button */}
+  <TooltipButton
+    content={isRecording ? "Stop Recording" : "Start Recording"}
+    buttonVariant="default"
+    buttonClassName={
+      isRecording 
+        ? "bg-purple-100 hover:bg-purple-200 text-purple-700" 
+        : "bg-blue-100 hover:bg-blue-200 text-blue-700"
+    }
+    icon={
+      isRecording ? (
+        <Disc3Icon className="min-w-5 min-h-5 animate-spin" />
+      ) : (
+        <Mic className="min-w-5 min-h-5" />
+      )
+    }
+    onClick={recordUserAnswer}
+  />
 
-          <TooltipButton
-            content="Record Again"
-            icon={<RefreshCw className="min-w-5 min-h-5" />}
-            onClick={recordNewAnswer}
-          />
-          
-          <TooltipButton
-            content="Save Result"
-            icon={
-              isAiGenerating ? (
-                <Loader className="min-w-5 min-h-5 animate-spin" />
-              ) : (
-                <Save className="min-w-5 min-h-5" />
-              )
-            }
-            onClick={() => setOpen(!open)}
-            disbaled={!aiResult}
+  {/* Record Again Button */}
+  <TooltipButton
+    content="Record Again"
+    buttonVariant="default"
+    buttonClassName="bg-yellow-100 hover:bg-yellow-200 text-yellow-700"
+    icon={<RefreshCw className="min-w-5 min-h-5" />}
+    onClick={recordNewAnswer}
+  />
+  
+  {/* Save Result Button */}
+  <TooltipButton
+    content="Save Result"
+    buttonVariant="default"
+    buttonClassName="bg-sky-100 hover:bg-sky-200 text-sky-700"
+    icon={
+      isAiGenerating ? (
+        <Loader className="min-w-5 min-h-5 animate-spin" />
+      ) : (
+        <Save className="min-w-5 min-h-5" />
+      )
+    }
+    onClick={() => setOpen(!open)}
+    disbaled={!aiResult}
           />
         </div>
 
