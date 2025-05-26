@@ -33,7 +33,7 @@ const Apply = () => {
   stats: "2M+ developers"
     },
       {
-      name: "InterShala",
+      name: "InternShala",
       Icon: Send,
       desc: "Discover cutting-edge startups and innovative tech opportunities",
       color: "#6366f1",
