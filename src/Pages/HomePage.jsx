@@ -17,6 +17,7 @@ import { BotMessageSquare } from "lucide-react";
 import { useNavigate } from "react-router";
 import Home_banner3 from "@/assets/Images/Home_banner3.png";
 
+
 export default function Home() {
   const navigate = useNavigate();
   const [visibleWords, setVisibleWords] = useState([]);

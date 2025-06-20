@@ -58,10 +58,10 @@ const Footer = () => {
                   <a href="https://vibely-fymd.onrender.com/login">Vibely-Chatbot</a>
                 </li>
                 <li className="hover:text-gray-600">
-                  <a href="#">B_A_B</a>
+                  <a href="https://eat-wise-restro-booking-assignment.vercel.app/">Eatwise</a>
                 </li>
                 <li className="hover:text-gray-600">
-                  <a href="#">Blogyy-App</a>
+                  <a href="https://build-a-bite-yjwj.vercel.app/">BuidABite</a>
                 </li>
               </ul>
             </div>
@@ -71,9 +71,9 @@ const Footer = () => {
           <div className="space-y-2 mb-8">
             <h3 className="font-semibold text-gray-300 mb-2">Made by</h3>
             <div className="text-sm text-gray-400">
-              <span className="font-bold hover:text-gray-600"><a href="#">Kushagra Malviya</a></span>
+              <span className="font-bold hover:text-gray-600"><a href="https://kushagra-portfolio-eta.vercel.app/">Kushagra Malviya</a></span>
               <span className="mx-2">|</span>
-              <span className="hover:text-gray-600"><a href="#">IIIT Ranchi</a></span>
+              <span className="hover:text-gray-600"><a href="https://iiitranchi.ac.in/">IIIT Ranchi</a></span>
             </div>
           </div>
         </div>

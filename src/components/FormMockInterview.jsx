@@ -145,7 +145,8 @@ Please format the output strictly as an array of JSON objects without any additi
           questions,
         });
       } else {
-        await addDoc(collection(db, "mockinterviews"), {//adding in doc
+        await addDoc(collection(db, "mockinterviews"), {
+          //adding in doc
           ...data,
           userId,
           questions,
@@ -153,7 +154,8 @@ Please format the output strictly as an array of JSON objects without any additi
         });
       }
 
-      toast.success(gettoastMessage.title, { //toast raised
+      toast.success(gettoastMessage.title, {
+        //toast raised
         description: gettoastMessage.description,
       });
 
